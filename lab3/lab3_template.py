@@ -165,7 +165,7 @@ def main(data):
 if __name__ == "__main__":
     # infile = 'data/CDO6674605799016.txt'  # for testing
     # Note: the 0th argument is the program itself.
-    data = pd.read_fwf("CDO6674605799016.txt")
+    data = pd.read_fwf("data/CDO6674605799016.txt")
     data = data[["YEARMODA", "TEMP"]]
     
     #I don't like the date format, so I changed it to the standard date-time format
