@@ -42,14 +42,13 @@ import matplotlib.pylab as plt
 # 5) sort the data by month so we can average it and take the standard deviation later
 # 6) Plot the results
 
-"""
 def parse_data(infile):
-    
+    """    
     Function to parse weather data
     :param infile: weather data input file
     :return: two lists. One list with the information from the third column (date)
                         One list with the information from the fourth column (temperature)
-    
+     """   
     wdates = []             # list of dates data
     wtemperatures = []      # list of temperarture data
 
@@ -57,19 +56,19 @@ def parse_data(infile):
 
 
 def calc_mean_std_dev(wdates, wtemp):
-    
+    """  
     Calculate the mean temperature per month
     Calculate the standard deviation per month's mean
     :param wdates: list with dates fields
     :param wtemp: temperature per month
     :return: means, std_dev: months_mean and std_dev lists
-    
+    """    
     means = []
     std_dev = []
 
     return means, std_dev
 
-"""
+
 
 def plot_data_task1(wyear, wtemp, month_mean, month_std):
     """
@@ -85,11 +84,12 @@ def plot_data_task1(wyear, wtemp, month_mean, month_std):
     plt.subplot(2, 1, 1)                # select first subplot
     plt.title("Temperatures at Ogden")
     plt.plot(wyear, wtemp, "bo")
-    plt.ylabel("Temperature, F")
-    plt.xlabel("Decimal Year")
+    plt.ylabel("Daily Temperature, F")
+    plt.xlabel("Year")
 
     plt.subplot(2, 1, 2)                # select second subplot
-    plt.ylabel("Temperature, F")
+    plt.ylabel("Average Temperature, F")
+    plt.xlabel("Year")
     months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
               "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     monthNumber = list(range(1, 13, 1))
@@ -108,14 +108,14 @@ def plot_data_task2(wyear, tempMin, tempMax):
     Also modify the function to take the params you think you will need
     to plot the requirements.
     :param: wyear: list with year 
-    :param: tempMin: list with year's mean values
-    :param: tempMax: list with year's mean values
+    :param: tempMin: list with each year's min value
+    :param: tempMax: list with each year's max value
     """
     plt.title("Minimum and Maximum Temperatures per year")
     plt.ylabel("Temperature, F")
     plt.xlabel("Year")
-    plt.scatter(wyear, tempMax, s=60, marker= "*", c='r', label='Maximum Temp')
-    plt.scatter(wyear, tempMin, s=60, marker= "*", c='b', label='Minimum Temp') 
+    plt.scatter(wyear, tempMax, s=40, marker= "*", c='r', label='Maximum Temp')
+    plt.scatter(wyear, tempMin, s=40, marker= "*", c='b', label='Minimum Temp') 
     plt.legend()
     plt.show()      # display plot
 
@@ -148,11 +148,13 @@ def main(data):
     wtemp = data['TEMP'] #getting the temperature
     
     #replace missing data with 0
-    data.loc[data['MIN'] == 9999.9] = 0
-    data.loc[data['MAX'] == 9999.9] = 0
+    data.loc[data['TEMP'] == 9999.9] = 0
+    data.loc[data['TEMP'] == 999.9] = 0
+    
     #get the min and max temperature
-    tempMin = data.groupby(data['Date'].dt.year)['MIN'].std().sort_index()
-    tempMax = data.groupby(data['Date'].dt.year)['MAX'].std().sort_index()
+    tempMin = data.groupby(data['Date'].dt.year)['TEMP'].min()
+    tempMax = data.groupby(data['Date'].dt.year)['TEMP'].max()
+    
     pyear = wyear.groupby(wyear).count()
     plot_data_task1(wyear, wtemp, month_mean.tolist(), month_std.tolist())
     # TODO: Create the data you need for this
@@ -163,11 +165,10 @@ def main(data):
 if __name__ == "__main__":
     # infile = 'data/CDO6674605799016.txt'  # for testing
     # Note: the 0th argument is the program itself.
-    data = pd.read_fwf("data/CDO6674605799016.txt")
-    data = data[["YEARMODA", "TEMP","MAX","MIN"]]
-
-    data['Date'] = pd.to_datetime(data['YEARMODA'], format='%Y%m%d')
+    data = pd.read_fwf("CDO6674605799016.txt")
+    data = data[["YEARMODA", "TEMP"]]
     
-    infile = sys.argv[1]
+    #I don't like the date format, so I changed it to the standard date-time format
+    data['Date'] = pd.to_datetime(data['YEARMODA'], format='%Y%m%d')
     main(data)
     exit(0)
