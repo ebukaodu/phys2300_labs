@@ -27,7 +27,7 @@ def set_scene(data):
         num = 2
     else:
         num = 0
-    floor = box(pos=vector(30,0,0), length=75, width = 3, height = 0.5, color=color.magenta)
+    floor = box(pos=vector(35,0,0), length=75, width = 3, height = 0.5, color=color.magenta)
     table = box(pos=vector(0, data['init_height'] / 2 ,0), length=5, width = 2, height = data['init_height'] - num, color=color.blue)
     
 
