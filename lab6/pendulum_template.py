@@ -35,14 +35,15 @@ def set_scene():
     
 
 
-def plot_data(t, y):
+def plot_data(t, y, z):
     """
     Create plot for the information from the simple pendulum motion.
     :param: t: list of the time for the pendulum motion
     :param: y: list of the angle for the pendulum motion
     """
     
-    plt.plot(t, y)
+    plt.plot(t, y, label='Shorter pendulum')
+    plt.plot(t, z, label='Longer pendulum')
     plt.title('Pendulum Motion:')
     plt.xlabel('time (s)')
     plt.ylabel('angle (rad)')
@@ -91,6 +92,7 @@ def main():
 
     ang = []
     time = []
+    ang2 = []
 
     roof = box(pos=vector(x,y,0), size=vector(1,0.1,1), color=color.red)
 
@@ -130,9 +132,11 @@ def main():
         k42 = h*f2(r2 + k32)
         r2 += (k12 + 2 * k22 + 2 * k32 + k42) / 6 # Update your vector
         
-
+        
         time.append(t)
         ang.append(r[0])
+        ang2.append(r2[0])
+
 
         # Update positions
         x = np.cos(r[0] - np.pi/2)
@@ -154,7 +158,7 @@ def main():
 
         #t=t+dt # updating time
 
-    plot_data(time, ang)
+    plot_data(time, ang, ang2)
 
 
 if __name__ == "__main__":
